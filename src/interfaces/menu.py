@@ -18,20 +18,40 @@ class Menu(ft.Container):
             text_style=ft.TextStyle(size=18)
         )
 
-        get_users_button = ft.Button(text="Mostrar usuarios", expand_loose=True, height=50, style=blue_border)
-        add_user_button = ft.Button(
-            text="Añadir usuario",
-            expand_loose=True,
-            height=50,
-            style=blue_border,
+        get_users_button = ft.Button(text="Mostrar usuarios", expand=3, height=50, style=blue_border)
+        add_user_button = ft.IconButton(
+            icon=ft.Icons.ADD_CIRCLE,
+            icon_color="blue",
+            icon_size=50,
+            tooltip="Añadir miembro",
             on_click=lambda e: self.toggle_visibility_callback()
         )
-        get_tethe_button = ft.Button(text="Mostrar diezmos", expand_loose=True, height=50, style=green_border)
-        add_tethe_button = ft.Button(text="Añadir diezmo", expand_loose=True, height=50, style=green_border)
+        users_row = ft.Row(
+            controls=[
+                get_users_button,
+                add_user_button
+            ],
+            expand_loose=True
+        )
+
+        get_tithe_button = ft.Button(text="Mostrar diezmos", expand=3, height=50, style=green_border)
+        add_tithe_button = ft.IconButton(
+            icon=ft.Icons.ADD_CIRCLE,
+            icon_color="green",
+            icon_size=50,
+            tooltip="Registrar diezmo",
+        )
+        tithe_row = ft.Row(
+            controls=[
+                get_tithe_button,
+                add_tithe_button
+            ],
+            expand_loose=True
+        )
 
         self.content = ft.Column(
             controls=[
-                get_users_button, add_user_button, get_tethe_button, add_tethe_button
+                users_row, tithe_row
             ],
             alignment=ft.MainAxisAlignment.CENTER,
             horizontal_alignment=ft.CrossAxisAlignment.STRETCH,
