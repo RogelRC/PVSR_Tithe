@@ -1,7 +1,8 @@
-import datetime
 import flet as ft
 from backend.services import get_zones
 from backend.services import create_user
+from backend.services import get_zone_code_by_name
+from datetime import datetime
 
 
 class CreateUser(ft.Container):
@@ -52,8 +53,8 @@ class CreateUser(ft.Container):
             icon=ft.Icons.CALENDAR_MONTH,
             on_click=lambda e: page.open(
                 ft.DatePicker(
-                    first_date=datetime.datetime(year=1900, month=1, day=1),
-                    last_date=datetime.datetime.now(),
+                    first_date=datetime(year=1900, month=1, day=1),
+                    last_date=datetime.now(),
                     on_change=handle_change,
                 )
             ),
@@ -165,13 +166,24 @@ class CreateUser(ft.Container):
                 )
                 return
 
+            def reformat_date(date_str):
+                # Parse the input date
+                date_obj = datetime.strptime(date_str, "%d-%m-%Y")
+                # Format and return as 'yyyymmdd'
+                return date_obj.strftime("%Y%m%d")
+
+            fixed_birth_date = self.tb_birth_date.value
+
+            if fixed_birth_date:
+                fixed_birth_date = reformat_date(fixed_birth_date)
+
             create_user(
                 self.tb_name.value or None,
                 self.tb_last_name.value or None,
                 self.dropdown_sex.value or None,
                 self.type_dropdown.value or None,
-                self.tb_birth_date.value or None,
-                self.zone_dropdown.value or None,
+                fixed_birth_date or None,
+                get_zone_code_by_name(self.zone_dropdown.value) or None,
                 self.tb_address.value or None,
                 self.marital_state_dropdown.value or None,
                 self.tb_dni.value or None,

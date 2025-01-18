@@ -53,7 +53,7 @@ def get_zone_code_by_name(name):
 
 ### ---------- Usuario ---------- ###
 
-def create_user(name, last_name, sex, type, zone_code, birth_date, address, marital_state, dni, phone, cellphone, notes):
+def create_user(name, last_name, sex, type, birth_date, zone_code, address, marital_state, dni, phone, cellphone, notes):
     new_user = User(
         name=name,
         last_name=last_name,

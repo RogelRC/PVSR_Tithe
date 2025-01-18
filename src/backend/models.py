@@ -21,7 +21,7 @@ class User(Base):
     sex = Column(String, CheckConstraint("sex IN ('M', 'F')"))
     type = Column(String, CheckConstraint("type IN ('Miembro', 'Visitante', 'Anónimo')"), nullable=False)
     birth_date = Column(String)
-    zone_code = Column(Integer, ForeignKey('zone.code'))
+    zone_code = Column(Integer, ForeignKey('zone.code'), nullable=False)
     address = Column(String)
     marital_state = Column(String, CheckConstraint("marital_state IN ('Casado(a)', 'Soltero(a)', 'Viudo(a)')"))
     dni = Column(String, CheckConstraint("dni GLOB '[0-9]*'"))
