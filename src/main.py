@@ -19,15 +19,28 @@ def main(page: ft.Page):
 
     header = Header()
     create_user = CreateUser(page)
-    menu = Menu(toggle_visibility_callback=create_user.toggle_visibility)
-    show_users = ShowUsers()
+    menu = Menu(toggle_visibility_callback=lambda index: set_visible(index))
+    show_users = ShowUsers(page)
+
+    controls=[
+        create_user,
+        show_users
+    ]
+
+    def set_visible(index_visible):
+        for i, control in enumerate(controls):
+            control.visible = (i == index_visible)
+
+            if control.visible:
+                # Si el control tiene un método de actualización, llámalo
+                if hasattr(control, "load_data"):
+                    control.load_data()
+
+        page.update()
 
     form = ft.Row(
-        controls=[
-            create_user,
-            show_users
-        ],
-        expand = 4,
+        controls=controls,
+        expand = 4
     )
 
     body = ft.Row(

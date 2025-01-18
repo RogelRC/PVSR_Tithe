@@ -18,13 +18,19 @@ class Menu(ft.Container):
             text_style=ft.TextStyle(size=18)
         )
 
-        get_users_button = ft.Button(text="Mostrar usuarios", expand=3, height=50, style=blue_border)
+        get_users_button = ft.Button(
+            text="Mostrar usuarios",
+            expand=3,
+            height=50,
+            style=blue_border,
+            on_click=lambda e: self.toggle_visibility_callback(1)
+        )
         add_user_button = ft.IconButton(
             icon=ft.Icons.ADD_CIRCLE,
             icon_color="blue",
             icon_size=50,
             tooltip="Añadir miembro",
-            on_click=lambda e: self.toggle_visibility_callback()
+            on_click=lambda e: self.toggle_visibility_callback(0)
         )
         users_row = ft.Row(
             controls=[

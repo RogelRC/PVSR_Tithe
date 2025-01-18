@@ -238,13 +238,7 @@ class CreateUser(ft.Container):
         self.padding = ft.padding.all(32)
         self.visible = False
 
-    def toggle_visibility(self):
-
-        self.visible = not self.visible
-
-        if self.visible:
-            self.zone_dropdown.options = [ft.dropdown.Option(zone.name) for zone in get_zones()]
-            self.zone_dropdown.options.pop(0) # Actualiza las opciones del dropdown
-            self.zone_dropdown.update()  # Refresca el dropdown en la UI
-
-        self.update()  # Actualiza el componente completo
+    def load_data(self):
+        self.zone_dropdown.options = [ft.dropdown.Option(zone.name) for zone in get_zones()]
+        self.zone_dropdown.options.pop(0) # Actualiza las opciones del dropdown
+        self.zone_dropdown.update()  # Refresca el dropdown en la UI

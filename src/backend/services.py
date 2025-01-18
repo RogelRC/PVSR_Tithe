@@ -97,3 +97,48 @@ def search_users(**kwargs):
     for key, value in kwargs.items():
         query = query.filter(getattr(User, key) == value)
     return query.all()
+
+def get_users_with_zone():
+    users_with_zone = (
+        session.query(
+            User.id,
+            User.name,
+            User.last_name,
+            User.sex,
+            User.type,
+            User.birth_date,
+            User.address,
+            User.marital_state,
+            User.dni,
+            User.phone,
+            User.cellphone,
+            User.notes,
+            Zone.code.label("zone_code"),
+            Zone.name.label("zone_name"),
+            Zone.leader.label("zone_leader"),
+        )
+        .join(Zone, User.zone_code == Zone.code)
+        .all()
+    )
+
+    # Formatear los resultados como una lista de diccionarios
+    return [
+        {
+            "id": user.id,
+            "name": user.name,
+            "last_name": user.last_name,
+            "sex": user.sex,
+            "type": user.type,
+            "birth_date": user.birth_date,
+            "address": user.address,
+            "marital_state": user.marital_state,
+            "dni": user.dni,
+            "phone": user.phone,
+            "cellphone": user.cellphone,
+            "notes": user.notes,
+            "zone_code": user.zone_code,
+            "zone_name": user.zone_name,
+            "zone_leader": user.zone_leader,
+        }
+        for user in users_with_zone
+    ]
