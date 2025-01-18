@@ -1,5 +1,5 @@
-from models import session
-from models import User, Zone, Tithe
+from backend.models import session
+from backend.models import User, Zone, Tithe
 
 ### ---------- Territorio ---------- ###
 
