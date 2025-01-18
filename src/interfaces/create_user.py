@@ -1,18 +1,18 @@
 import datetime
-
 import flet as ft
-
 from backend.services import get_zones
+from backend.services import create_user
 
 
 class CreateUser(ft.Container):
+
     def __init__(self, page):
         super().__init__(self)
 
         # nombre(s), apellidos y sexo
-        tb_name = ft.TextField(label="Nombre(s)", expand=3)
-        tb_last_name = ft.TextField(label="Apellidos(s)", expand=3)
-        dropdown_sex = ft.Dropdown(
+        self.tb_name = ft.TextField(label="Nombre(s)", expand=3)
+        self.tb_last_name = ft.TextField(label="Apellidos(s)", expand=3)
+        self.dropdown_sex = ft.Dropdown(
             label="Sexo",
             options=[
                 ft.dropdown.Option("M"),
@@ -23,15 +23,15 @@ class CreateUser(ft.Container):
 
         full_name_row = ft.Row(
             controls=[
-                tb_name,
-                tb_last_name,
-                dropdown_sex
+                self.tb_name,
+                self.tb_last_name,
+                self.dropdown_sex
             ],
             spacing=20
         )
 
         # tipo de diezmador
-        type_dropdown = ft.Dropdown(
+        self.type_dropdown = ft.Dropdown(
             label="Tipo",
             options=[
                 ft.dropdown.Option("Miembro"),
@@ -41,11 +41,11 @@ class CreateUser(ft.Container):
         )
 
         # fecha de nacimiento
-        tb_birth_date = ft.TextField(label="Fecha de nacimiento", read_only=True, expand=True)
+        self.tb_birth_date = ft.TextField(label="Fecha de nacimiento", read_only=True, expand=True)
 
         def handle_change(e):
-            tb_birth_date.value = e.control.value.strftime('%d-%m-%Y')  # Asigna directamente la cadena formateada
-            tb_birth_date.update()
+            self.tb_birth_date.value = e.control.value.strftime('%d-%m-%Y')  # Asigna directamente la cadena formateada
+            self.tb_birth_date.update()
 
         birth_date_picker = ft.ElevatedButton(
             "Selecciona una fecha",
@@ -61,7 +61,7 @@ class CreateUser(ft.Container):
 
         birth_date_row = ft.Row(
             controls=[
-                tb_birth_date,
+                self.tb_birth_date,
                 birth_date_picker
             ],
             spacing = 20
@@ -71,24 +71,24 @@ class CreateUser(ft.Container):
         zone_options = [ft.dropdown.Option(zone.name) for zone in get_zones()]
         zone_options.pop(0)
 
-        zone_dropdown = ft.Dropdown(
+        self.zone_dropdown = ft.Dropdown(
             label="Territorio",
             options=zone_options,
             expand=1
         )
 
-        tb_address = ft.TextField(label="Dirección", expand=3)
+        self.tb_address = ft.TextField(label="Dirección", expand=3)
 
         full_address_row = ft.Row(
             controls=[
-                zone_dropdown,
-                tb_address
+                self.zone_dropdown,
+                self.tb_address
             ],
             spacing=20
         )
 
         # estado civil y carnet de identidad
-        marital_state_dropdown = ft.Dropdown(
+        self.marital_state_dropdown = ft.Dropdown(
             label="Estado civil",
             options=[
                 ft.dropdown.Option("Casado(a)"),
@@ -98,50 +98,108 @@ class CreateUser(ft.Container):
             expand=1
         )
 
-        tb_dni = ft.TextField(label="Carnet de identidad", expand=3)
+        self.tb_dni = ft.TextField(label="Carnet de identidad", expand=3)
 
         full_legal_row = ft.Row(
             controls=[
-                marital_state_dropdown,
-                tb_dni
+                self.marital_state_dropdown,
+                self.tb_dni
             ],
             spacing=20
         )
 
         # telefonos
-        tb_phone = ft.TextField(label="Teléfono fijo", expand=True)
-        tb_cellphone = ft.TextField(label="Teléfono celular", expand=True)
+        self.tb_phone = ft.TextField(label="Teléfono fijo", expand=True)
+        self.tb_cellphone = ft.TextField(label="Teléfono celular", expand=True)
 
         full_phone_row = ft.Row(
             controls=[
-                tb_phone,
-                tb_cellphone
+                self.tb_phone,
+                self.tb_cellphone
             ],
             spacing=20
         )
 
         # notas
-        tb_notes = ft.TextField(label="Notas", multiline=True, expand=True)
+        self.tb_notes = ft.TextField(label="Notas", multiline=True, expand=True)
 
         # botones de guardar o cancelar
+        def clean_fields():
+            self.tb_name.value = None
+            self.tb_last_name.value = None
+            self.dropdown_sex.value = None
+            self.type_dropdown.value = None
+            self.tb_birth_date.value = None
+            self.zone_dropdown.value = None
+            self.tb_address.value = None
+            self.marital_state_dropdown.value = None
+            self.tb_dni.value = None
+            self.tb_phone.value = None
+            self.tb_cellphone.value = None
+            self.tb_notes.value = None
+
+            self.page.update()
+
+        def save_user():
+            if(
+                not self.tb_name.value or
+                not self.tb_last_name.value or
+                not self.type_dropdown.value or
+                not self.zone_dropdown.value
+            ):
+                def handle_close():
+                    page.close(dialog)
+
+                dialog = ft.AlertDialog(
+                    modal=True,
+                    title=ft.Text("Advertencia"),
+                    content=ft.Text("Debes llenar todos los campos obligatorios:\nNombre(s)\nApellidos\nTipo\nTerritorio"),
+                    actions=[
+                        ft.TextButton("Aceptar", on_click=lambda e: handle_close()),
+                    ],
+                    actions_alignment=ft.MainAxisAlignment.END
+                )
+
+                page.open(
+                    dialog
+                )
+                return
+
+            create_user(
+                self.tb_name.value or None,
+                self.tb_last_name.value or None,
+                self.dropdown_sex.value or None,
+                self.type_dropdown.value or None,
+                self.tb_birth_date.value or None,
+                self.zone_dropdown.value or None,
+                self.tb_address.value or None,
+                self.marital_state_dropdown.value or None,
+                self.tb_dni.value or None,
+                self.tb_phone.value or None,
+                self.tb_cellphone.value or None,
+                self.tb_notes.value or None
+            )
+
+            clean_fields()
+
         save_button = ft.ElevatedButton(
             text="Guardar",
             bgcolor=ft.Colors.GREEN,
             expand=True,
-            #on_click=lambda e: save_user_button_accion(input_user_column)
+            on_click=lambda e: save_user()
         )
 
-        cancel_button = ft.ElevatedButton(
-            text="Cancelar",
+        restart_button = ft.ElevatedButton(
+            text="Reiniciar",
             bgcolor=ft.Colors.RED,
             expand=True,
-            #on_click=lambda e: reset_controls(input_user_column)
+            on_click=lambda e: clean_fields()
         )
 
         action_buttons = ft.Row(
             controls=[
                 save_button,
-                cancel_button
+                restart_button
             ],
             spacing=20
         )
@@ -150,12 +208,12 @@ class CreateUser(ft.Container):
         self.content = ft.Column(
             controls=[
                 full_name_row,
-                type_dropdown,
+                self.type_dropdown,
                 birth_date_row,
                 full_address_row,
                 full_legal_row,
                 full_phone_row,
-                tb_notes,
+                self.tb_notes,
                 action_buttons
             ],
             spacing=32,
@@ -169,5 +227,12 @@ class CreateUser(ft.Container):
         self.visible = False
 
     def toggle_visibility(self):
+
         self.visible = not self.visible
-        self.update()
+
+        if self.visible:
+            self.zone_dropdown.options = [ft.dropdown.Option(zone.name) for zone in get_zones()]
+            self.zone_dropdown.options.pop(0) # Actualiza las opciones del dropdown
+            self.zone_dropdown.update()  # Refresca el dropdown en la UI
+
+        self.update()  # Actualiza el componente completo

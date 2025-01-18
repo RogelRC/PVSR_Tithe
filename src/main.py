@@ -6,6 +6,16 @@ from interfaces.menu import Menu
 
 
 def main(page: ft.Page):
+    page.title = "Iglesia Evangélica Pentecostal Asambleas de Dios Palabras de Vida Sobre la Roca"
+    page.bgcolor = ft.Colors.BLACK
+    page.window.maximized = True
+
+    # Configurar la localización
+    page.locale_configuration = ft.LocaleConfiguration(
+        supported_locales=[ft.Locale("es", "ES")],  # Soporta español
+        current_locale=ft.Locale("es", "ES")  # Establecer el idioma actual a español
+    )
+
     header = Header()
     create_user = CreateUser(page)
     menu = Menu(toggle_visibility_callback=create_user.toggle_visibility)
@@ -29,8 +39,5 @@ def main(page: ft.Page):
         header,
         body
     )
-    page.title = "Iglesia Evangélica Pentecostal Asambleas de Dios Palabras de Vida Sobre la Roca"
-    page.bgcolor = ft.Colors.BLACK
-    page.window.maximized = True
 
 ft.app(target=main)
