@@ -1,8 +1,10 @@
 import flet as ft
 
 class Menu(ft.Container):
-    def __init__(self):
+    def __init__(self, toggle_visibility_callback):
         super().__init__(self)
+
+        self.toggle_visibility_callback = toggle_visibility_callback
 
         blue_border = ft.ButtonStyle(
             side=ft.BorderSide(color=ft.Colors.BLUE, width=1),
@@ -17,7 +19,13 @@ class Menu(ft.Container):
         )
 
         get_users_button = ft.Button(text="Mostrar usuarios", expand_loose=True, height=50, style=blue_border)
-        add_user_button = ft.Button(text="Añadir usuario", expand_loose=True, height=50, style=blue_border)
+        add_user_button = ft.Button(
+            text="Añadir usuario",
+            expand_loose=True,
+            height=50,
+            style=blue_border,
+            on_click=self.toggle_visibility_callback
+        )
         get_tethe_button = ft.Button(text="Mostrar diezmos", expand_loose=True, height=50, style=green_border)
         add_tethe_button = ft.Button(text="Añadir diezmo", expand_loose=True, height=50, style=green_border)
 

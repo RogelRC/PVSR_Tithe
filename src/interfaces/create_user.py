@@ -146,12 +146,6 @@ class CreateUser(ft.Container):
             spacing=20
         )
 
-
-
-
-
-
-
         # Contenido
         self.content = ft.Column(
             controls=[
@@ -168,8 +162,11 @@ class CreateUser(ft.Container):
             expand=True,
         )
 
-
-        self.expand = 4
+        self.expand = True
         self.border_radius = 20
         self.bgcolor = "#202120"
         self.padding = ft.padding.all(32)
+        self.visible = False
+
+    def toggle_visibility(self):
+        self.visible = not self.visible
