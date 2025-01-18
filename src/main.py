@@ -3,6 +3,7 @@ import flet as ft
 from interfaces.create_user import CreateUser
 from interfaces.header import Header
 from interfaces.menu import Menu
+from interfaces.show_users import ShowUsers
 
 
 def main(page: ft.Page):
@@ -19,10 +20,12 @@ def main(page: ft.Page):
     header = Header()
     create_user = CreateUser(page)
     menu = Menu(toggle_visibility_callback=create_user.toggle_visibility)
+    show_users = ShowUsers()
 
     form = ft.Row(
         controls=[
-            create_user
+            create_user,
+            show_users
         ],
         expand = 4,
     )
