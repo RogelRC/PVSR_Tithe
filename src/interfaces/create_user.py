@@ -170,3 +170,4 @@ class CreateUser(ft.Container):
 
     def toggle_visibility(self):
         self.visible = not self.visible
+        self.update()

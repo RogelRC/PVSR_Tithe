@@ -24,7 +24,7 @@ class Menu(ft.Container):
             expand_loose=True,
             height=50,
             style=blue_border,
-            on_click=self.toggle_visibility_callback
+            on_click=lambda e: self.toggle_visibility_callback()
         )
         get_tethe_button = ft.Button(text="Mostrar diezmos", expand_loose=True, height=50, style=green_border)
         add_tethe_button = ft.Button(text="Añadir diezmo", expand_loose=True, height=50, style=green_border)
