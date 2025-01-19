@@ -4,7 +4,6 @@ from backend.services import create_user
 from backend.services import get_zone_code_by_name
 from datetime import datetime
 
-
 class CreateUser(ft.Container):
 
     def __init__(self, page):
